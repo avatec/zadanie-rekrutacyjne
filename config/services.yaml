@@ -47,6 +47,11 @@ services:
     # Task Handlers
     App\Application\Task\Handler\UpdateTaskStatusHandler: ~
 
+    # Task Query Service
+    App\Application\Task\Query\TaskQueryService: ~
+
     # GraphQL Resolvers
     App\GraphQL\Resolver\UserResolver:
+        public: true
+    App\GraphQL\Resolver\TaskResolver:
         public: true

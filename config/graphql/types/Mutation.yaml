@@ -1,0 +1,29 @@
+Mutation:
+    type: object
+    config:
+        fields:
+            createTask:
+                type: "Task!"
+                description: "Create a new task"
+                args:
+                    userId:
+                        type: "Int!"
+                        description: "User ID who owns the task"
+                    title:
+                        type: "String!"
+                        description: "Task title"
+                    description:
+                        type: "String!"
+                        description: "Task description"
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').createTask(args['userId'], args['title'], args['description'])"
+            updateTaskStatus:
+                type: "Task!"
+                description: "Update task status"
+                args:
+                    taskId:
+                        type: "Int!"
+                        description: "Task ID"
+                    status:
+                        type: "String!"
+                        description: "New status (TODO, IN_PROGRESS, DONE)"
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').updateTaskStatus(args['taskId'], args['status'])"

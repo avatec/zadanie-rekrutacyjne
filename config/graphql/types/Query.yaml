@@ -6,3 +6,15 @@ Query:
                 type: "User"
                 description: "Get current user information"
                 resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\UserResolver').me()"
+            tasks:
+                type: "[Task!]!"
+                description: "Get all tasks (admin)"
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').tasks()"
+            userTasks:
+                type: "[Task!]!"
+                description: "Get tasks for a specific user"
+                args:
+                    userId:
+                        type: "Int!"
+                        description: "User ID"
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').userTasks(args['userId'])"

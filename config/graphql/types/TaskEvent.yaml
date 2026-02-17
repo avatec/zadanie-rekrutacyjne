@@ -1,0 +1,13 @@
+TaskEvent:
+    type: object
+    config:
+        fields:
+            type:
+                type: "String!"
+                description: "Event type"
+            occurredAt:
+                type: "String!"
+                description: "Event occurrence timestamp"
+            data:
+                type: "String!"
+                description: "Event data as JSON string"

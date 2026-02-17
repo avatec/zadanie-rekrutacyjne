@@ -1,0 +1,29 @@
+Task:
+    type: object
+    config:
+        fields:
+            id:
+                type: "Int!"
+                description: "Task ID"
+            userId:
+                type: "Int!"
+                description: "User ID who owns the task"
+            title:
+                type: "String!"
+                description: "Task title"
+            description:
+                type: "String!"
+                description: "Task description"
+            status:
+                type: "String!"
+                description: "Task status (TODO, IN_PROGRESS, DONE)"
+            createdAt:
+                type: "String!"
+                description: "Task creation timestamp"
+            updatedAt:
+                type: "String!"
+                description: "Task last update timestamp"
+            history:
+                type: "[TaskEvent!]!"
+                description: "Task event history from event store"
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').history(value)"
