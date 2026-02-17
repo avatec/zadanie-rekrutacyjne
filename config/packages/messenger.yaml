@@ -12,9 +12,9 @@ framework:
             sync: 'sync://'
 
         routing:
-            # Route domain events to async transport for projection updates
-            'App\Domain\Task\Event\TaskCreatedEvent': async
-            'App\Domain\Task\Event\TaskStatusUpdatedEvent': async
+            # Route domain events to sync transport - handlers update read model projection immediately
+            'App\Domain\Task\Event\TaskCreatedEvent': sync
+            'App\Domain\Task\Event\TaskStatusUpdatedEvent': sync
 
 # when@test:
 #    framework:
