@@ -4,8 +4,12 @@ Query:
         fields:
             me:
                 type: "User"
-                description: "Get current user information"
-                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\UserResolver').me()"
+                description: "Get user information by ID"
+                args:
+                    userId:
+                        type: "Int!"
+                        description: "User ID"
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\UserResolver').me(args['userId'])"
             tasks:
                 type: "[Task!]!"
                 description: "Get all tasks (admin)"

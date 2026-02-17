@@ -2,6 +2,14 @@ Mutation:
     type: object
     config:
         fields:
+            login:
+                type: "User"
+                description: "Login by username"
+                args:
+                    username:
+                        type: "String!"
+                        description: "Username"
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\UserResolver').login(args['username'])"
             createTask:
                 type: "Task!"
                 description: "Create a new task"
@@ -26,4 +34,8 @@ Mutation:
                     status:
                         type: "String!"
                         description: "New status (TODO, IN_PROGRESS, DONE)"
-                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').updateTaskStatus(args['taskId'], args['status'])"
+                    isAdmin:
+                        type: "Boolean"
+                        description: "Use admin transition rules (allows reverting from DONE)"
+                        defaultValue: false
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').updateTaskStatus(args['taskId'], args['status'], args['isAdmin'])"
