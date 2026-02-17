@@ -38,7 +38,8 @@ services:
     App\Infrastructure\Persistence\User\UserMapper: ~
 
     # Task Factory
-    App\Application\Task\Factory\TaskFactory: ~
+    App\Application\Task\Factory\TaskFactoryInterface:
+        class: App\Application\Task\Factory\TaskFactory
 
     # Status Transition Strategy - Default as default
     App\Application\Task\StatusTransition\StatusTransitionStrategyInterface:
