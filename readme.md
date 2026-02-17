@@ -1,15 +1,18 @@
 # Zadanie rekrutacyjne
 
-## Testowanie
+## Uruchamianie środowiska Docker i aplikacji
+Aplikacja domyślnie dostępna jest na localhost:8090 (można zmienić port edytując plik docker-compose.yaml linia 28)
 ```bash
+chmod +x ./docker.sh && chmod +x ./test.sh
+docker compose up -d --build
 ./docker.sh console doctrine:schema:update --force
 ./docker.sh console doctrine:migrations:migrate   
 ./docker.sh console app:sync-users
 ```
 
-## Uruchamianie środowiska Docker
+## Uruchomienie testów GraphQL
 ```bash
-docker compose up -d
+./test.sh
 ```
 
 ## Dostępne polecenia (docker.sh)
