@@ -26,6 +26,10 @@ services:
     App\Domain\User\Repository\UserRepositoryInterface:
         class: App\Infrastructure\Persistence\User\UserRepository
 
+    # Task Domain Repository Interface binding
+    App\Domain\Task\Repository\TaskRepositoryInterface:
+        class: App\Infrastructure\Persistence\Task\TaskRepository
+
     # Data Source Strategy - JSONPlaceholder as default
     App\Infrastructure\ExternalApi\Strategy\DataSourceStrategy:
         class: App\Infrastructure\ExternalApi\JSONPlaceholder\JSONPlaceholderClient

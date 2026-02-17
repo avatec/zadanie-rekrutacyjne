@@ -12,6 +12,7 @@
         "doctrine/orm": "^3.0",
         "overblog/graphql-bundle": "^1.9",
         "symfony/console": "8.0.*",
+        "symfony/doctrine-messenger": "8.0.*",
         "symfony/dotenv": "8.0.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "8.0.*",
