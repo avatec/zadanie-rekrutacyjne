@@ -34,8 +34,4 @@ Mutation:
                     status:
                         type: "String!"
                         description: "New status (TODO, IN_PROGRESS, DONE)"
-                    isAdmin:
-                        type: "Boolean"
-                        description: "Use admin transition rules (allows reverting from DONE)"
-                        defaultValue: false
-                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').updateTaskStatus(args['taskId'], args['status'], args['isAdmin'])"
+                resolve: "@=service('App\\\\GraphQL\\\\Resolver\\\\TaskResolver').updateTaskStatus(args['taskId'], args['status'])"

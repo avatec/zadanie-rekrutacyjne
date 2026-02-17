@@ -3,6 +3,7 @@
 BASE_URL="http://localhost:8090"
 PASS=0
 FAIL=0
+COOKIE_JAR=$(mktemp)
 
 run_test() {
     local name="$1"
@@ -11,6 +12,7 @@ run_test() {
 
     response=$(curl -s -X POST "$BASE_URL/" \
         -H "Content-Type: application/json" \
+        -b "$COOKIE_JAR" -c "$COOKIE_JAR" \
         -d "{\"query\":\"$query\"}")
 
     if echo "$response" | grep -q '"errors"'; then
@@ -32,6 +34,7 @@ run_test_expect_error() {
 
     response=$(curl -s -X POST "$BASE_URL/" \
         -H "Content-Type: application/json" \
+        -b "$COOKIE_JAR" -c "$COOKIE_JAR" \
         -d "{\"query\":\"$query\"}")
 
     if echo "$response" | grep -q '"errors"'; then
@@ -61,14 +64,28 @@ echo "--- Users ---"
 run_test "login(username: Bret)" \
     "mutation { login(username: \\\"Bret\\\") { id username name email } }"
 
-run_test "me(userId: 1)" \
-    "{ me(userId: 1) { id username name email } }"
+run_test "me" \
+    "{ me { id username name email } }"
 
 echo ""
 echo "--- Tasks ---"
 
-run_test "createTask(userId: 1)" \
-    "mutation { createTask(userId: 1, title: \\\"Test task\\\", description: \\\"Opis testowy\\\") { id title status } }"
+CREATE_RESPONSE=$(curl -s -X POST "$BASE_URL/" \
+    -H "Content-Type: application/json" \
+    -b "$COOKIE_JAR" -c "$COOKIE_JAR" \
+    -d '{"query":"mutation { createTask(userId: 1, title: \"Test task\", description: \"Opis testowy\") { id title status } }"}')
+
+TASK_ID=$(echo "$CREATE_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | grep -o '[0-9]*')
+
+if echo "$CREATE_RESPONSE" | grep -q '"errors"'; then
+    echo "❌ FAIL: createTask(userId: 1)"
+    echo "   Response: $CREATE_RESPONSE"
+    FAIL=$((FAIL + 1))
+else
+    echo "✅ PASS: createTask(userId: 1) [taskId=$TASK_ID]"
+    echo "   Response: $CREATE_RESPONSE"
+    PASS=$((PASS + 1))
+fi
 
 run_test "tasks" \
     "{ tasks { id title status } }"
@@ -77,17 +94,29 @@ run_test "userTasks(userId: 1)" \
     "{ userTasks(userId: 1) { id title status } }"
 
 run_test "updateTaskStatus -> IN_PROGRESS" \
-    "mutation { updateTaskStatus(taskId: 1, status: \\\"IN_PROGRESS\\\") { id status } }"
+    "mutation { updateTaskStatus(taskId: $TASK_ID, status: \\\"IN_PROGRESS\\\") { id status } }"
 
 run_test "updateTaskStatus -> DONE" \
-    "mutation { updateTaskStatus(taskId: 1, status: \\\"DONE\\\") { id status } }"
+    "mutation { updateTaskStatus(taskId: $TASK_ID, status: \\\"DONE\\\") { id status } }"
 
-run_test "updateTaskStatus -> TODO (admin revert)" \
-    "mutation { updateTaskStatus(taskId: 1, status: \\\"TODO\\\", isAdmin: true) { id status } }"
+echo ""
+echo "--- Non-admin revert attempt (login as Antonette - no admin rights) ---"
 
-run_test_expect_error "updateTaskStatus -> DONE (invalid: TODO->DONE skip IN_PROGRESS)" \
-    "mutation { updateTaskStatus(taskId: 1, status: \\\"DONE\\\") { id status } }" \
+run_test "login as non-admin (Antonette)" \
+    "mutation { login(username: \\\"Antonette\\\") { id username name email } }"
+
+run_test_expect_error "updateTaskStatus -> TODO (non-admin cannot revert from DONE)" \
+    "mutation { updateTaskStatus(taskId: $TASK_ID, status: \\\"TODO\\\") { id status } }" \
     "Cannot transition"
+
+echo ""
+echo "--- Admin revert (re-login as admin user: Bret with is_admin=true) ---"
+
+run_test "login as admin (Bret)" \
+    "mutation { login(username: \\\"Bret\\\") { id username name email } }"
+
+run_test "updateTaskStatus -> TODO (admin revert via session)" \
+    "mutation { updateTaskStatus(taskId: $TASK_ID, status: \\\"TODO\\\") { id status } }"
 
 run_test "task history" \
     "{ tasks { id title history { type occurredAt data } } }"
@@ -96,3 +125,5 @@ echo ""
 echo "========================================"
 echo " Results: $PASS passed, $FAIL failed"
 echo "========================================"
+
+rm -f "$COOKIE_JAR"

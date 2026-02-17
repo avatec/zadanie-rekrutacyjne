@@ -10,6 +10,11 @@ docker compose up -d --build
 ./docker.sh console app:sync-users
 ```
 
+Następnie należy wykonać polecenie, aby ustalić usera 1 jako admina:
+```bash
+./docker.sh console dbal:run-sql "UPDATE users SET is_admin = true WHERE id = 1"
+```
+
 ## Uruchomienie testów GraphQL
 ```bash
 ./test.sh
