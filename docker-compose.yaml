@@ -11,11 +11,9 @@ services:
       - ./docker/php/php.ini:/usr/local/etc/php/conf.d/custom.ini
     environment:
       - DATABASE_URL=postgresql://symfony:symfony@postgres:5432/symfony_db?serverVersion=16&charset=utf8
-      - MYSQL_URL=mysql://symfony:symfony@mysql:3306/symfony_db?serverVersion=8.0
       - MESSENGER_TRANSPORT_DSN=redis://redis:6379/messages
     depends_on:
       - postgres
-      - mysql
       - redis
     networks:
       - symfony_network
@@ -48,21 +46,6 @@ services:
     networks:
       - symfony_network
 
-  mysql:
-    image: mysql:8.0
-    container_name: symfony_mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: symfony_db
-      MYSQL_USER: symfony
-      MYSQL_PASSWORD: symfony
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - symfony_network
-
   redis:
     image: redis:7-alpine
     container_name: symfony_redis
@@ -73,32 +56,8 @@ services:
     networks:
       - symfony_network
 
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-16}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-!ChangeMe!}
-      POSTGRES_USER: ${POSTGRES_USER:-app}
-    healthcheck:
-      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-app}", "-U", "${POSTGRES_USER:-app}"]
-      timeout: 5s
-      retries: 5
-      start_period: 60s
-    volumes:
-      - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
-
 volumes:
   postgres_data:
-  mysql_data:
-
-###> doctrine/doctrine-bundle ###
-  database_data:
-###< doctrine/doctrine-bundle ###
   redis_data:
 
 networks:

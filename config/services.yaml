@@ -31,7 +31,7 @@ services:
         class: App\Infrastructure\Persistence\Task\TaskRepository
 
     # Data Source Strategy - JSONPlaceholder as default
-    App\Infrastructure\ExternalApi\Strategy\DataSourceStrategy:
+    App\Application\User\Port\DataSourceStrategy:
         class: App\Infrastructure\ExternalApi\JSONPlaceholder\JSONPlaceholderClient
 
     # User Mapper
@@ -46,6 +46,22 @@ services:
 
     # Task Handlers
     App\Application\Task\Handler\UpdateTaskStatusHandler: ~
+
+    # Task Read Model Repository Interface binding
+    App\Application\Task\Port\TaskReadModelRepositoryInterface:
+        class: App\Infrastructure\Persistence\Task\TaskReadModelRepository
+
+    # Task Id Generator Interface binding
+    App\Application\Task\Port\TaskIdGeneratorInterface:
+        class: App\Infrastructure\Persistence\Task\TaskIdGenerator
+
+    # Event Store Interface binding
+    App\Application\Task\Port\EventStoreInterface:
+        class: App\Infrastructure\Persistence\EventStore\EventStoreRepository
+
+    # Task Query Service Interface binding
+    App\Application\Task\Query\TaskQueryServiceInterface:
+        class: App\Application\Task\Query\TaskQueryService
 
     # Task Query Service
     App\Application\Task\Query\TaskQueryService: ~

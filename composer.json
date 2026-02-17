@@ -32,10 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "App\\Domain\\": "Domain/",
-            "App\\Application\\": "Application/",
-            "App\\Infrastructure\\": "Infrastructure/"
+            "App\\": "src/"
         }
     },
     "autoload-dev": {
