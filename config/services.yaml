@@ -21,3 +21,18 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # User Domain Repository Interface binding
+    App\Domain\User\Repository\UserRepositoryInterface:
+        class: App\Infrastructure\Persistence\User\UserRepository
+
+    # Data Source Strategy - JSONPlaceholder as default
+    App\Infrastructure\ExternalApi\Strategy\DataSourceStrategy:
+        class: App\Infrastructure\ExternalApi\JSONPlaceholder\JSONPlaceholderClient
+
+    # User Mapper
+    App\Infrastructure\Persistence\User\UserMapper: ~
+
+    # GraphQL Resolvers
+    App\GraphQL\Resolver\UserResolver:
+        public: true

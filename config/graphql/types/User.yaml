@@ -1,0 +1,23 @@
+User:
+    type: object
+    config:
+        description: "User entity"
+        fields:
+            id:
+                type: "Int!"
+                description: "User ID"
+            username:
+                type: "String!"
+                description: "Username"
+            name:
+                type: "String!"
+                description: "Full name"
+            email:
+                type: "String!"
+                description: "Email address"
+            phone:
+                type: "String"
+                description: "Phone number"
+            website:
+                type: "String"
+                description: "Website URL"
