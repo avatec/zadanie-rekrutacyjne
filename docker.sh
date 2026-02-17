@@ -17,6 +17,10 @@ case "$1" in
         shift
         docker exec "${CONTAINER_NAME}" php bin/console "$@"
         ;;
+    composer)
+        shift
+        docker exec "${CONTAINER_NAME}" composer "$@"
+        ;;
     bash|shell)
         docker exec -it "${CONTAINER_NAME}" bash
         ;;
