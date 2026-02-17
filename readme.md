@@ -1,5 +1,12 @@
 # Zadanie rekrutacyjne
 
+## Testowanie
+```bash
+./docker.sh console doctrine:schema:update --force
+./docker.sh console doctrine:migrations:migrate   
+./docker.sh console app:sync-users
+```
+
 ## Uruchamianie środowiska Docker
 ```bash
 docker compose up -d
