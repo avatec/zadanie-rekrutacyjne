@@ -11,3 +11,10 @@ parameters:
         - var
         - vendor
     reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        -
+            message: '#^Dynamic call to static method PHPUnit\\Framework\\Assert::#'
+            path: tests/*
+        -
+            message: '#^Property .+::\$id is never written, only read\.$#'
+            path: src/Infrastructure/Persistence/*
