@@ -37,6 +37,9 @@ services:
     # User Mapper
     App\Infrastructure\Persistence\User\UserMapper: ~
 
+    # Task Factory
+    App\Application\Task\Factory\TaskFactory: ~
+
     # GraphQL Resolvers
     App\GraphQL\Resolver\UserResolver:
         public: true
